@@ -29,14 +29,14 @@ router.post("/register", validateRoleName, (req, res, next) => {
       "role_name": "angel"
     }
    */
-  const { username, password, role_name } = req.body;
-  Users.add({ username, password, role_name })
+  const { username, password } = req.body;
+  const { role_name } = req;
+  const hash = bcrypt.hashSync(password, 8)
+  Users.add({ username, password: hash, role_name })
   .then(newUser => {
     res.status(201).json(newUser)
   })
-  .catch(err => {
-    next(err)
-  })
+  .catch(next)
 });
 
 
